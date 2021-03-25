@@ -1,89 +1,83 @@
 import zxcvbn from 'zxcvbn';
 import hsimp from 'hsimp';
+import './../demo/styles.scss';
 
 export default class PasswordSecurity
 {
-  inputElement: HTMLInputElement;
+  private element: Element;
+  private inputElement: HTMLInputElement;
+  private durationElement: Element;
+  private tipsElement: Element;
 
-  isPasswordVisible: boolean = false;
+  private isPasswordVisible: boolean = false;
 
-  constructor(inputElement: HTMLInputElement) {
-    this.inputElement = inputElement;
-
+  constructor(element: Element) {
+    this.element = element;
+    this.durationElement = element.querySelector('.pws__duration-value') as Element;
+    this.inputElement = element.querySelector('input') as HTMLInputElement;
+    this.tipsElement = element.querySelector('.pws__tips') as Element;
   }
 
   enterDocument() {
     this.inputElement.addEventListener('keyup', this.handleKeyUp.bind(this));
-
-      //this.getHandler().listen(
-    // this.getElementByClass('visibility-switch'), goog.events.EventType.CLICK,
-    // this.handleVisibilityChange_);
-
-
-  // this.getHandler().listen(this.input_, goog.events.EventType.KEYUP,
-  //   this.handleKeyUp_);
-  // hsimp({
-  //   'outputChecks': this.renderChecks_.bind(this)
-  // })(this.input_);
+    const visibilitySwitch = this.element.querySelector('.pws__visibility-switch');
+    if (visibilitySwitch) {
+      visibilitySwitch.addEventListener('click', this.handleVisibilityChange.bind(this));
+    }
   }
 
-  evaluatePassword() {
-  //   var result = window['zxcvbn'](this.input_.value);
-  // goog.dom.classlist.removeAll(this.getElement(), ['level0', 'level1',
-  //   'level2', 'level3', 'level4']);
+  private evaluatePassword() {
+    const password = this.inputElement.value;
+    const result = zxcvbn(password);
+    const levelCls = ['pws__level0', 'pws__level1', 'pws__level2', 'pws__level3', 'pws__level4'];
+    levelCls.forEach((cls) => this.element.classList.remove(cls));
+    const score = result['score'];
+    const cls = 'pws__level' + score;
+    const secs = result.crack_times_seconds.offline_slow_hashing_1e4_per_second as number;
 
-  // var score = result['score'];
-  // var cls = 'level' + score;
+    // Strong Password
+    if (secs / 60 / 60 / 24 > 90) {
+      this.setSuccess(true);
+      return;
+    } else {
+      this.setSuccess(false);
+    }
 
-  // var secs = result['crack_times_seconds']['offline_slow_hashing_1e4_per_second'];
 
-  // if (secs / 60 / 60 / 24 > 90)
-  // {
-  //   this.setMessage(lang('password.strong'), 'strong');
-  // }
-  // else
-  // {
-  //   this.setMessage('');
-  // }
+    this.element.classList.add(cls);
+    const msg = result.crack_times_display.offline_slow_hashing_1e4_per_second as string;
 
-  // goog.dom.classlist.add(this.getElement(), cls);
+    this.durationElement.innerHTML = msg;
 
-  // var msg = result['crack_times_display']['offline_slow_hashing_1e4_per_second'];
-
-  // this.getElementByClass('duration-value').innerHTML = msg;
+    const hsimpResult = hsimp(password);
+    this.renderChecks(hsimpResult.checks);
   }
 
-  handleVisibilityChange() {
-    // this.isPasswordVisible_ = !this.isPasswordVisible_;
-    // this.input_.type = this.isPasswordVisible_ ? 'text' : 'password';
+  private handleVisibilityChange() {
+    this.isPasswordVisible = this.inputElement.type == 'text';
+    this.isPasswordVisible = !this.isPasswordVisible;
+    this.inputElement.type = this.isPasswordVisible ? 'text' : 'password';
 
-    // var target = /** @type {Element} */ (e.target);
-    // goog.dom.classlist.toggle(target, 'visible');
+    if (this.isPasswordVisible) {
+      this.element.classList.add('password-visible');
+    } else {
+      this.element.classList.remove('password-visible');
+    }
   }
 
-  handleKeyUp() {
-    console.log(zxcvbn(this.inputElement.value).crack_times_display.offline_slow_hashing_1e4_per_second);
-    console.log(hsimp(this.inputElement.value).time);
-
-    // this.evaluatePassword_();
-
-    // this.dispatchEvent(goog.events.EventType.CHANGE);
+  private handleKeyUp() {
+    this.evaluatePassword();
   }
 
-  renderChecks() {
-    // this.getElementByClass('message').innerHTML = checks.length > 0 ?
-    // checks[0]['message'] : '';
+  private renderChecks(checks: any[]) {
+    this.tipsElement.innerHTML = checks.length > 0 ? checks[0]['message'] : '';
   }
 
-  setMessage() {
-    // goog.dom.classlist.enable(this.getElement(), 'custom-message-visible',
-    // !!message);
-
-    // var customMessage = this.getElement().querySelector('.custom-message');
-    // if (message)
-    // {
-    //   customMessage.className = 'custom-message ' + opt_cls;
-    //   customMessage.innerHTML = goog.string.htmlEscape(message);
-    // }
+  private setSuccess(isSuccess: boolean) {
+    if (isSuccess) {
+      this.element.classList.add('pws__success');
+    } else {
+      this.element.classList.remove('pws__success');
+    }
   }
 }

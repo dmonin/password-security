@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Password Security</title>
+  <!-- <link rel="stylesheet" href="styles.scss"> -->
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+  <style>
+    html, body {
+      font-family: "Open Sans", Arial, Helvetica, sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-item password-security pws">
+    <div class="pws__input-wrap">
+      <input type="password" name="password" class="pws__input" />
+
+      <div class="pws__visibility-switch" title="Show / Hide password"></div>
+
+      <div class="pws__level">
+        <div class="pws__bar"></div>
+        <div class="pws__bar"></div>
+        <div class="pws__bar"></div>
+        <div class="pws__bar"></div>
+      </div>
+    </div>
+
+    <div class="pws__duration">Your password can be cracked <span class="pws__duration-value"></span>.</div>
+    <div class="pws__success-message">Strong one. Keep it safe.</div>
+    <div class="pws__tips"></div>
+
+  </div>
+  <script src="demo.js" type="module"></script>
+</body>
+</html>
