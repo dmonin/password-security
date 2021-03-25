@@ -1,5 +1,5 @@
 # Password Security
-Password input field which displays to user how strong is the password.
+Password input field which displays how strong is the entered password.
 
 ### Screenshot:
 
@@ -10,7 +10,7 @@ Password input field which displays to user how strong is the password.
 
 ![password-security](./img/password-security.gif)
 
-## Check out Demo
+## Check out the Demo
 
 1. Clone Repository
 2. Go to directory: `cd password-security`
@@ -18,21 +18,32 @@ Password input field which displays to user how strong is the password.
 4. Run `npm run demo`
 5. Go to `http://localhost:1234`
 
+
+
 ## How to integrate
 
-### Add to head:
+### Add styles to the &lt;head&gt;:
+
 ```html
 <link rel="stylesheet" href="third-party/password-security.css">
 ```
 
-### Add to before the closing body tag:
+
+
+### Add before the closing &lt;body&gt; tag:
+
+Download required standalone libraries ([hsimp](https://github.com/howsecureismypassword/hsimp) & [zxcvbn](https://github.com/dropbox/zxcvbn)).
+
 ```html
 <script src="third-party/hsimp.js"></script>
 <script src="third-party/zxcvbn.js"></script>
 <script src="third-party/password-security.min.js"></script>
 ```
 
+
+
 ### Use following mark up on your page:
+
 ```html
 <div class="pws">
   <div class="pws__input-wrap">
@@ -55,5 +66,14 @@ Password input field which displays to user how strong is the password.
 </div>
 ```
 
+
+
+## Special Thanks
+
+Special thanks to [hsimp](https://github.com/howsecureismypassword/hsimp) & [zxcvbn](https://github.com/dropbox/zxcvbn).
+
+
+
 ## Roadmap
+
 React Version coming soon.
